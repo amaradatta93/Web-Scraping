@@ -26,3 +26,9 @@ def parse_coordinates(coordinate_string):
     """
     coordinates = coordinate_string.split(' ')
     return float(coordinates[0].replace('°N', '')), float(coordinates[1].replace('°W', ''))
+
+
+def get_table(url):
+    info_soup = get_parser(url)
+    table = info_soup.find('table', {'class': 'navbox plainrowheaders wikitable'})
+    return table

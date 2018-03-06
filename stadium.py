@@ -1,10 +1,4 @@
-from utils import get_parser, str_to_int, convert_to_dictionary, parse_coordinates
-
-
-def get_table(url):
-    info_soup = get_parser(url)
-    table = info_soup.find('table', {'class': 'navbox plainrowheaders wikitable'})
-    return table
+from utils import str_to_int, convert_to_dictionary, parse_coordinates, get_table
 
 
 def get_stadium_capacity(stadium_table):
@@ -38,12 +32,14 @@ def find_stadiums_within_seat_range(min_seats, max_seats, url):
     list_map = convert_to_dictionary(get_football_teams(table), get_stadium_capacity(table))
     for team in list_map:
         if (list_map[team] >= min_seats) and (list_map[team] <= max_seats):
-            print("{0}: {1}".format(team, str(list_map[team])))
+            print("{0:>20}: {1:10}".format(team, str(list_map[team])))
 
 
 def find_teams_with_bounds(latitude, longitude, url):
     coord_table = get_table(url)
     coordinates_map_to_team = convert_to_dictionary(get_football_teams(coord_table), get_coordinates(coord_table))
-    for i in coordinates_map_to_team:
-        if (coordinates_map_to_team[i][0] >= latitude) or (coordinates_map_to_team[i][1] >= longitude):
-            print(i + ': ' + str(coordinates_map_to_team[i][0]) + '°N, ' + str(coordinates_map_to_team[i][1]) + '°W')
+    for team in coordinates_map_to_team:
+        if (coordinates_map_to_team[team][0] >= latitude) or (coordinates_map_to_team[team][1] >= longitude):
+            print("{team:>20}: {latitude:>10}°N, {longitude:>10}°W".format(team=team,
+                                                               latitude=str(coordinates_map_to_team[team][0]),
+                                                               longitude=str(coordinates_map_to_team[team][1])))
